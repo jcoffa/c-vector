@@ -94,7 +94,6 @@ bool vecResize(Vector *vec, int newCap) {
 	// fails at this point, thereby leaving the vector's data untouched, we still can't
 	// bring back the data that was truncated. We lost all those elements for no reason.
 	void **newStorage = malloc(sizeof(void*) * newCap);
-	// Can't assume malloc works every time, no matter how unlikely
 	if (newStorage == NULL) {
 		return false;
 	}
@@ -116,10 +115,42 @@ bool vecResize(Vector *vec, int newCap) {
 }
 
 
-bool vecPush(Vector *vec, void *data);
+bool vecPush(Vector *vec, void *data) {
+	if (vec == NULL) {
+		return false;
+	}
+
+	return vecInsert(vec, vec->length, data);
+}
 
 
-bool vecInsert(Vector *vec, int index, void *data);
+bool vecInsert(Vector *vec, int index, void *data) {
+	if (vec == NULL) {
+		return false;
+	}
+
+	// Can't insert data off the end of the vector
+	if (index > vec->length) {
+		return false;
+	}
+
+	if (vecIsFull(vec) && !vecGrow(vec)) {
+		// vecGrow is not executed if the vector isn't full due to short-circuit evaluation.
+		// It returns false on a failure, so this if-statement body is only reached if the
+		// vecGrow function failed, in which case this function should also fail.
+		return false;
+	}
+
+	// Shift all elements that come after the index to the right
+	if (index != vec->length) {
+		printf("Shifting elements from index %d to %d\n", index, index+1);
+		memmove((vec->data)+index+1, (vec->data)+index, sizeof(void*)*(vec->length-index));
+	}
+
+	(vec->data)[index] = data;
+	(vec->length)++;
+	return true;
+}
 
 
 bool vecInsertSorted(Vector *vec, void *data);
