@@ -56,10 +56,64 @@ void vecFree(Vector *vec) {
 }
 
 
-bool vecGrow(Vector *vec);
+bool vecGrow(Vector *vec) {
+	if (vec == NULL) {
+		return false;
+	}
+
+	// This max function ensures the vector always increases in size,
+	// even when its original capacity was 0 or 1
+	return vecResize(vec, max(vec->capacity * GROWTH_FACTOR, vec->capacity + 1));
+}
 
 
-bool vecResize(Vector *vec, int newCap);
+bool vecResize(Vector *vec, int newCap) {
+	if (vec == NULL) {
+		return false;
+	}
+
+	// One of these days humanity may discover a negative length.
+	// This is not that day.
+	if (newCap < 0) {
+		return false;
+	}
+
+	// No sense trying anything if the resize won't do anything anyways
+	if (vec->capacity == newCap) {
+		return true;
+	}
+
+	// Allocate the new data storage.
+	// New storage is allocated instead of just realloc'ing the vector's own
+	// data storage just in case something goes wrong along the way. This way,
+	// the original vector is only modified after the memory for the new storage
+	// has been allocated successfully.
+	//
+	// If we did it the other way where the vector's data storage was realloc'd,
+	// we would have to delete truncated elements before the realloc. If the realloc
+	// fails at this point, thereby leaving the vector's data untouched, we still can't
+	// bring back the data that was truncated. We lost all those elements for no reason.
+	void **newStorage = malloc(sizeof(void*) * newCap);
+	// Can't assume malloc works every time, no matter how unlikely
+	if (newStorage == NULL) {
+		return false;
+	}
+
+	// Move the elements over to the new storage
+	memmove(newStorage, vec->data, sizeof(void*) * min(vec->length, newCap));
+
+	// Free truncated elements if necessary
+	for (int i = newCap; i < vec->length; i++) {
+		printf("Freeing truncated data at index %d\n", i);	// TODO remove
+		vec->deleteData((vec->data)[i]);
+	}
+
+	free(vec->data);
+	vec->data = newStorage;
+	vec->capacity = newCap;
+
+	return true;
+}
 
 
 bool vecPush(Vector *vec, void *data);

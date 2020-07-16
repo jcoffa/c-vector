@@ -18,6 +18,7 @@
 
 // Returns the larger of two values
 #define max(x,y) (x >= y ? x : y)
+#define min(x,y) (x <= y ? x : y)
 
 /**************
  * STRUCTURES *
@@ -28,7 +29,7 @@
  * Contains the function pointers for working with the abstracted vector data.
  */
 typedef struct vectorHead {
-	int length;				// The number of elements currently stored in the vector
+	int length;					// The number of elements currently stored in the vector
 	int capacity;				// The number of elements the vector can hold before needing to be resized
 	void **data;				// The actual data stored by the vector
 	void (*deleteData)(void *);	// Function pointer to free an element in the vector
@@ -85,8 +86,8 @@ void vecFree(Vector *vec);
 
 
 /*
- * Increases the capacity of the Vector, allowing it to store more elements. The increase is equal
- * to the vector's initial capacity multiplied by the GROWTH_FACTOR macro.
+ * Increases the capacity of the Vector, allowing it to store more elements.
+ * The new capacity is equal to the vector's previous capacity multiplied by the GROWTH_FACTOR macro.
  *
  * Returns false if the vector is NULL or if any memory allocation fails.
  * Returns true otherwise, indicating a successful resize operation.
@@ -98,10 +99,12 @@ bool vecGrow(Vector *vec);
  * Forcibly sets the Vector's capacity to a new value. If this causes the vector's
  * capacity to decrease, all truncated elements are removed from the vector and freed.
  *
- * Returns false if the new capacity is equal to the vector's original capacity,
- * if the new capacity is negative, if the vector is NULL, or if any memory allocation fails.
+ * Returns false if the new capacity is negative, if the vector is NULL,
+ * or if any memory allocation fails.
  *
  * Returns true otherwise, indicating a successful resize operation.
+ * True is also returned if the new capacity equals the old capacity,
+ * in which case this function does nothing and returns immediately.
  */
 bool vecResize(Vector *vec, int newCap);
 
