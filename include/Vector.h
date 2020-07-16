@@ -142,6 +142,15 @@ bool vecInsertSorted(Vector *vec, void *data);
 
 
 /*
+ * Returns the element at the specified index in the Vector.
+ *
+ * Returns NULL if the vector itself is NULL, if the vector is empty,
+ * if the index is negative, or if the index goes off the end of the vector.
+ */
+void *vecGet(Vector *vec, int index);
+
+
+/*
  * Returns and removes the last element from the Vector.
  *
  * Returns NULL if the vector itself is NULL, or if the vector is empty.

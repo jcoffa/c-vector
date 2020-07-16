@@ -156,6 +156,15 @@ bool vecInsert(Vector *vec, int index, void *data) {
 bool vecInsertSorted(Vector *vec, void *data);
 
 
+void *vecGet(Vector *vec, int index) {
+	if (vec == NULL || vecIsEmpty(vec) || index < 0 || index >= vec->length) {
+		return NULL;
+	}
+
+	return (vec->data)[index];
+}
+
+
 void *vecPop(Vector *vec) {
 	if (vec == NULL || vecIsEmpty(vec)) {
 		return NULL;
