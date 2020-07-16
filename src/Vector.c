@@ -221,7 +221,7 @@ bool vecIsFull(const Vector *vec) {
 }
 
 
-bool *vecIndexToString(const Vector *vec, int idx);
+char *vecIndexToString(const Vector *vec, int idx);
 
 
 void vecPrintIndex(const Vector *vec, int idx);

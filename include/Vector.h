@@ -217,7 +217,7 @@ bool vecIsFull(const Vector *vec);
  *
  * The string must be freed by the calling function after use.
  */
-bool *vecIndexToString(const Vector *vec, int idx);
+char *vecIndexToString(const Vector *vec, int idx);
 
 
 /*
