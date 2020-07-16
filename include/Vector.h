@@ -144,7 +144,7 @@ bool vecInsertSorted(Vector *vec, void *data);
 /*
  * Returns and removes the last element from the Vector.
  *
- * Returns NULL if the vector itself is NULL.
+ * Returns NULL if the vector itself is NULL, or if the vector is empty.
  */
 void *vecPop(Vector *vec);
 
@@ -153,8 +153,8 @@ void *vecPop(Vector *vec);
  * Returns and removes the element at the specified index in the Vector.
  * All elements to the right of this index are shifted to the left to fill the gap.
  *
- * Returns NULL if the vector itself is NULL, or if the index goes off
- * the end of the vector.
+ * Returns NULL if the vector itself is NULL, if the vector is empty,
+ * if the index is negative, or if the index goes off the end of the vector.
  */
 void *vecRemove(Vector *vec, int index);
 

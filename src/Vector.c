@@ -156,10 +156,31 @@ bool vecInsert(Vector *vec, int index, void *data) {
 bool vecInsertSorted(Vector *vec, void *data);
 
 
-void *vecPop(Vector *vec);
+void *vecPop(Vector *vec) {
+	if (vec == NULL || vecIsEmpty(vec)) {
+		return NULL;
+	}
+
+	return vecRemove(vec, vec->length-1);
+}
 
 
-void *vecRemove(Vector *vec, int index);
+void *vecRemove(Vector *vec, int index) {
+	if (vec == NULL || vecIsEmpty(vec) || index < 0 || index >= vec->length) {
+		return NULL;
+	}
+
+	void *toReturn = (vec->data)[index];
+
+	// Shift the elements to the right of this index one space to the left
+	// to fill in the gap created by this removal
+	if (index != vec->length) {
+		memmove((vec->data)+index, (vec->data)+index+1, sizeof(void*)*(vec->length-index-1));
+	}
+
+	(vec->length)--;
+	return toReturn;;
+}
 
 
 void *vecFind(Vector *vec, bool (*compareFunc)(const void *, const void *), const void *searchRecord);
