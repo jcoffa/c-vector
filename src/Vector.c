@@ -192,6 +192,17 @@ void *vecRemove(Vector *vec, int index) {
 }
 
 
+bool vecDeleteAtIndex(Vector *vec, int index) {
+	if (vec == NULL || vecIsEmpty(vec) || index < 0 || index >= vec->length) {
+		return false;
+	}
+
+	void *toDelete = vecRemove(vec, index);
+	vec->deleteData(toDelete);
+	return true;
+}
+
+
 void *vecFind(Vector *vec, bool (*compareFunc)(const void *, const void *), const void *searchRecord);
 
 

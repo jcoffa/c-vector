@@ -122,8 +122,8 @@ bool vecPush(Vector *vec, void *data);
  * Inserts the data at the specified index within the Vector.
  * All elements to the right of this index are shifted to the right to make room.
  *
- * Returns false if the vector is NULL, if the index goes off the end of the vector,
- * or if any memory allocation fails.
+ * Returns false if the vector is NULL, if the index is negaive,
+ * if the index goes off the end of the vector, or if any memory allocation fails.
  * Returns true otherwise, indicating a successful insertion operation.
  */
 bool vecInsert(Vector *vec, int index, void *data);
@@ -166,6 +166,20 @@ void *vecPop(Vector *vec);
  * if the index is negative, or if the index goes off the end of the vector.
  */
 void *vecRemove(Vector *vec, int index);
+
+
+/*
+ * Removes the element at the specified index in the Vector and deletes the data stored there.
+ *
+ * Returns false if the vector is NULL, if the vector is empty,
+ * if the index is negative, or if the index goes off the end of the vector.
+ *
+ * Returns true otherwise, indicating a successful deletion.
+ *
+ * NOTE: it's called `vecDeleteAtIndex` and not just `vecDelete` because I thought that sounded
+ * too much like the `vecClear` and `vecFree` functions and might be confusing.
+ */
+bool vecDeleteAtIndex(Vector *vec, int index);
 
 
 /*
