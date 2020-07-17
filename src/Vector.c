@@ -125,12 +125,7 @@ bool vecPush(Vector *vec, void *data) {
 
 
 bool vecInsert(Vector *vec, int index, void *data) {
-	if (vec == NULL) {
-		return false;
-	}
-
-	// Can't insert data off the end of the vector
-	if (index > vec->length) {
+	if (vec == NULL || index < 0 || index > vec->length) {
 		return false;
 	}
 
@@ -143,7 +138,6 @@ bool vecInsert(Vector *vec, int index, void *data) {
 
 	// Shift all elements that come after the index to the right
 	if (index != vec->length) {
-		printf("Shifting elements from index %d to %d\n", index, index+1);
 		memmove((vec->data)+index+1, (vec->data)+index, sizeof(void*)*(vec->length-index));
 	}
 
