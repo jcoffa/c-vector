@@ -103,14 +103,35 @@ bool vecResize(Vector *vec, int newCap) {
 
 	// Free truncated elements if necessary
 	for (int i = newCap; i < vec->length; i++) {
-		printf("Freeing truncated data at index %d\n", i);	// TODO remove
 		vec->deleteData((vec->data)[i]);
 	}
+
+	// Reduce length if vector was made smaller and elements were truncated
+	vec->length = min(vec->length, newCap);
 
 	free(vec->data);
 	vec->data = newStorage;
 	vec->capacity = newCap;
 
+	return true;
+}
+
+
+bool vecSet(Vector *vec, int index, void *data) {
+	if (vec == NULL || index < 0 || index > vecLength(vec)) {
+		return false;
+	}
+
+	// Free the data that was there previously if necessary
+	if (index == vecLength(vec)) {
+		// If the index is equal to the length, then this function call is equivalent to the
+		// vecPush function.
+		return vecPush(vec, data);
+	}
+
+	// Must delete the old data before setting and returning
+	vec->deleteData((vec->data)[index]);
+	(vec->data)[index] = data;
 	return true;
 }
 

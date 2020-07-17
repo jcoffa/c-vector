@@ -110,9 +110,21 @@ bool vecResize(Vector *vec, int newCap);
 
 
 /*
+ * Sets the value at the specified index within the Vector, overwriting (and freeing)
+ * the data that was previously there if necessary.
+ *
+ * Returns false if the vector is NULL, if the index is negative,
+ * or if the index goes off the end of the vector.
+ *
+ * Returns true otherwise, indicating a successful operation.
+ */
+bool vecSet(Vector *vec, int index, void *data);
+
+
+/*
  * Adds the data to the end of the Vector.
  *
- * Returns false if the vector is NULL or if any memmory alloation fails.
+ * Returns false if the vector is NULL, or if any memmory allocation fails.
  * Returns true otherwise, indicating a successful push operation.
  */
 bool vecPush(Vector *vec, void *data);
@@ -124,6 +136,7 @@ bool vecPush(Vector *vec, void *data);
  *
  * Returns false if the vector is NULL, if the index is negaive,
  * if the index goes off the end of the vector, or if any memory allocation fails.
+ *
  * Returns true otherwise, indicating a successful insertion operation.
  */
 bool vecInsert(Vector *vec, int index, void *data);
