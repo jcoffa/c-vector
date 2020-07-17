@@ -147,7 +147,7 @@ bool vecInsertSorted(Vector *vec, void *data);
  * Returns NULL if the vector itself is NULL, if the vector is empty,
  * if the index is negative, or if the index goes off the end of the vector.
  */
-void *vecGet(Vector *vec, int index);
+void *vecGet(const Vector *vec, int index);
 
 
 /*

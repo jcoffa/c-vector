@@ -156,7 +156,7 @@ bool vecInsert(Vector *vec, int index, void *data) {
 bool vecInsertSorted(Vector *vec, void *data);
 
 
-void *vecGet(Vector *vec, int index) {
+void *vecGet(const Vector *vec, int index) {
 	if (vec == NULL || vecIsEmpty(vec) || index < 0 || index >= vec->length) {
 		return NULL;
 	}
@@ -230,14 +230,60 @@ bool vecIsFull(const Vector *vec) {
 }
 
 
-char *vecIndexToString(const Vector *vec, int idx);
+char *vecIndexToString(const Vector *vec, int index) {
+	char *toReturn;
+
+	if (vec == NULL || vecIsEmpty(vec) || index < 0 || index >= vec->length) {
+		toReturn = malloc(sizeof(char));
+		toReturn[0] = '\0';
+	} else {
+		toReturn = vec->printData(vecGet(vec, index));
+	}
+
+	return toReturn;
+}
 
 
-void vecPrintIndex(const Vector *vec, int idx);
+void vecPrintIndex(const Vector *vec, int index) {
+	char *toPrint = vecIndexToString(vec, index);
+	printf("%s\n", toPrint);
+	free(toPrint);
+}
 
 
-char *vecToString(const Vector *vec);
+char *vecToString(const Vector *vec) {
+	unsigned int length = 3;	// 3 for '[', ']', and '\0'
+	char *toReturn = malloc(sizeof(char)*length);
+	strcpy(toReturn, "[");
+
+	if (vec == NULL || vecIsEmpty(vec)) {
+		strcat(toReturn, "]");
+		return toReturn;
+	}
+
+	char *part = vecIndexToString(vec, 0);
+	length += strlen(part);
+	toReturn = realloc(toReturn, length);
+	strcat(toReturn, part);
+	free(part);
+
+	for (int i = 1; i < vec->length; i++) {
+		part = vecIndexToString(vec, i);
+		length += strlen(part) + 2;	// +2 for ", "
+		toReturn = realloc(toReturn, length);
+		strcat(toReturn, ", ");
+		strcat(toReturn, part);
+		free(part);
+	}
+	strcat(toReturn, "]");
+
+	return toReturn;
+}
 
 
-void vecPrint(const Vector *vec);
+void vecPrint(const Vector *vec) {
+	char *toPrint = vecToString(vec);
+	printf("%s\n", toPrint);
+	free(toPrint);
+}
 
