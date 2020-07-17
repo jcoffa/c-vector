@@ -147,7 +147,24 @@ bool vecInsert(Vector *vec, int index, void *data) {
 }
 
 
-bool vecInsertSorted(Vector *vec, void *data);
+bool vecInsertSorted(Vector *vec, void *data) {
+	if (vec == NULL) {
+		return false;
+	}
+
+	if (vecIsEmpty(vec)) {
+		return vecInsert(vec, 0, data);
+	}
+
+	int i;
+	for (i = 0; i < vecLength(vec); i++) {
+		if (vec->compare(vecGet(vec, i), data) >= 0) {
+			return vecInsert(vec, i, data);
+		}
+	}
+
+	return vecInsert(vec, i, data);
+}
 
 
 void *vecGet(const Vector *vec, int index) {
