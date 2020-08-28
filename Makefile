@@ -1,5 +1,5 @@
-# all, clean, move, and echo are not filenames
-.PHONY: all clean move echo
+# Name of the library in all lowercase letters
+PROG = vector
 
 # Directories
 SRC = src
@@ -8,7 +8,7 @@ BIN = bin
 VPATH := $(SRC):$(HED):$(BIN)
 
 # Files
-LIB = libvector.so
+LIB = lib$(PROG).so
 SRCS := $(wildcard $(SRC)/*.c)
 HEDS := $(wildcard $(HED)/*.h)
 OBJS := $(addprefix $(BIN)/,$(notdir $(SRCS:%.c=%.o)))
@@ -20,13 +20,16 @@ CFLAGS := -std=c99 -Wall -Wpedantic -I$(SRC) -I$(HED) -I$(BIN) -O2
 ##############
 # Make Rules #
 ##############
+.PHONY: all $(PROG) clean move $(BIN)
 
-all: $(LIB) move
+all: $(PROG) move
 
-$(LIB): $(OBJS)
+$(PROG): $(LIB)
+
+$(LIB): $(OBJS) | $(BIN)
 	gcc -g -shared $(OBJS) -o $(BIN)/$(LIB)
 
-$(BIN)/%.o: $(SRC)/%.c $(HED)/%.h
+$(BIN)/%.o: $(SRC)/%.c $(HED)/%.h | $(BIN)
 	gcc -g $(CFLAGS) -c -fpic $< -o $@
 
 
@@ -40,14 +43,6 @@ clean:
 move:
 	mv $(BIN)/$(LIB) ../
 
-echo:
-	@echo SRC = $(SRC)
-	@echo HED = $(HED)
-	@echo BIN = $(BIN)
-	@echo
-	@echo SRCS = $(SRCS)
-	@echo HEDS = $(HEDS)
-	@echo OBJS = $(OBJS)
-	@echo
-	@echo LIB = $(LIB)
+$(BIN):
+	mkdir -p $@
 
